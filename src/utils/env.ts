@@ -1,0 +1,1 @@
+export const MONGO_CONNECT_STRING: string = import.meta.env.VITE_MONGO_CONNECT_STRING as string

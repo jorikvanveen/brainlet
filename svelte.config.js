@@ -1,9 +1,6 @@
 import preprocess from 'svelte-preprocess';
-import wasmPack from 'vite-plugin-wasm-pack'
 import adapter from "@sveltejs/adapter-node"
 import * as path from "path"
-
-const plugins = wasmPack.default(["./words-backend"])
 
 /** @type {import('@sveltejs/kit').Config} */
 const config = {
@@ -26,7 +23,6 @@ const config = {
 			build: {
 				minify: true
 			},
-			plugins: [plugins],
 			resolve: {
 				alias: {
 					"@components": path.resolve("./src/components"),
