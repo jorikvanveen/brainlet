@@ -14,8 +14,8 @@ const config = {
 			out: "build",
 			precompress: false,
 			env: {
-				host: "localhost",
-				port: "5000"
+				host: "host",
+				port: "port"
 			}
 		}),
 		target: '#svelte',
