@@ -8,9 +8,11 @@
     "check": "svelte-check --tsconfig ./tsconfig.json",
     "check:watch": "svelte-check --tsconfig ./tsconfig.json --watch",
     "lint": "prettier --ignore-path .gitignore --check --plugin-search-dir=. . && eslint --ignore-path .gitignore .",
-    "format": "prettier --ignore-path .gitignore --write --plugin-search-dir=. ."
+    "format": "prettier --ignore-path .gitignore --write --plugin-search-dir=. .",
+    "wasm": "wasm-pack build ./words-backend --target web"
   },
   "devDependencies": {
+    "@sveltejs/adapter-node": "next",
     "@sveltejs/kit": "next",
     "@typescript-eslint/eslint-plugin": "^4.31.1",
     "@typescript-eslint/parser": "^4.31.1",
@@ -23,7 +25,11 @@
     "svelte-check": "^2.2.6",
     "svelte-preprocess": "^4.9.4",
     "tslib": "^2.3.1",
-    "typescript": "^4.4.3"
+    "typescript": "^4.4.3",
+    "vite-plugin-wasm-pack": "^0.1.5"
   },
-  "type": "module"
+  "type": "module",
+  "dependencies": {
+    "mongodb": "^4.1.2"
+  }
 }
