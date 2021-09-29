@@ -16,8 +16,14 @@
     import Input from "@components/input.svelte";
     import Button from "@components/button.svelte"
     import { tick } from "svelte";
+    import { browser } from "$app/env"; browser
 
     export let set: Set;
+
+    const performanceNow = (): number => {
+        if (browser) return performance.now()
+        return 0
+    }
 
     let words: WordCollection = new WordCollection(set);
     let currentWord: Word = words.selectWord();
@@ -28,14 +34,15 @@
     $: learnedPercentRounded = Math.round(learnedPercent)
     let userInput = ""
     let intermediateScreen = false
-    let intermediateSince = new Date()
+    let intermediateSince = performanceNow() || 0
     let isCorrect = false
 
     let defInput: HTMLInputElement | null = null
 
     const onSubmit = () => {
-        isCorrect = userInput === currentDef
+        isCorrect = userInput.trim() === currentDef.trim()
         intermediateScreen = true
+        intermediateSince = performanceNow()
     }
 
     const next = () => {
@@ -64,9 +71,12 @@
         next()
     }
 
+
     const handleWindowKeydown = (e: KeyboardEvent) => {
         // If press space, continue with next word
-        if (e.key === " " || e.key === "Enter" && intermediateScreen) next()
+        const timeIntermediate = performanceNow() - intermediateSince
+        console.log(timeIntermediate)
+        if ((e.key === " " || e.key === "Enter") && intermediateScreen && timeIntermediate > 10) next()
     }
 </script>
 
@@ -83,6 +93,8 @@
         <p class="wrong">Wrong</p>
         The correct definition was: <span class="correction">{currentDef}</span>
         <br/>
+        You said: {userInput}
+        <br/>
         <Button label="Override: I was correct" on:click={override}/>
     {/if}
     <p>Press space to continue</p>
@@ -90,14 +102,14 @@
 
 <style>
     .correct {
-        color: green;
+        color: #2dbf2d;
     }
 
     .wrong {
-        color: red;
+        color: #ff2828;
     }
     
     .correction {
-        color: blue;
+        color: #9163ff;
     }
 </style>
