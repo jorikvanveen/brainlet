@@ -1,6 +1,6 @@
 import type { ServerRequest } from "@sveltejs/kit/types/hooks"
 import getDb from "@utils/db"
-import sha256 from "crypto-js/sha256"
+import sha256 from "crypto-js/sha256.js"
 import { nanoid } from "nanoid"
 import createToken from "@utils/_createToken"
 

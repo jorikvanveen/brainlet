@@ -1,7 +1,7 @@
 import getDb from "@utils/db";
 import type { User } from "@utils/dbReturnTypes"
 import type { ObjectID } from "bson";
-import sha256 from "crypto-js/sha256";
+import sha256 from "crypto-js/sha256.js";
 import { nanoid } from "nanoid";
 
 interface TokenData {
