@@ -8,7 +8,6 @@ export async function get(request: ServerRequest): Promise<Record<string, unknow
 
     const requestedSet = await sets.findOne({_id: new ObjectId(request.params.set_id)})
 
-    console.log(requestedSet)
 
     return {
         body: {

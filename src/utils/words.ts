@@ -46,6 +46,7 @@ class WordCollection {
     constructor(set: Set) {
         this.words = []
         this.words_learning = []
+        this.words_history = []
 
         for (const wordData of set.words) {
             this.words.push(new Word(wordData.term, wordData.definition))
@@ -69,11 +70,34 @@ class WordCollection {
         return this.words.filter(word => word.learned)
     }
 
+    private spaceToWord(word_input: Word): number {
+        for (let i = this.words_history.length-1; i >= 0; i--) {
+            if (word_input.term == this.words_history[i].term) {
+                return this.words_history.length-1 - i
+            }
+
+        }
+        return 10000
+    }
+
     public selectWord(): Word {
         // Select random word from this.words_learning
         const words_learning = this.words_learning
-        const random_idx = Math.floor(Math.random() * words_learning.length)
-        return words_learning[random_idx]
+
+        const min_space_between_words = Math.min(3, words_learning.length-1) 
+        const filtered_words = words_learning.filter(word => {
+            return this.spaceToWord(word) >= min_space_between_words
+        })
+        const random_idx = Math.floor(Math.random() * filtered_words.length)
+
+        const selected_word = filtered_words[random_idx]
+
+        this.words_history.push(selected_word)
+
+        console.log("Selected word",filtered_words)
+
+        return selected_word
+
     }
 
     public update(): void {

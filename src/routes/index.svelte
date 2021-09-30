@@ -17,7 +17,6 @@
 
     export let sets: Array<any>;
 
-    console.log(sets)
 </script>
 
 {#each sets as set}

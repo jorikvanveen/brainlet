@@ -11,7 +11,6 @@ const errorResponse = {
 export async function post(request: ServerRequest): Promise<Record<string, unknown>> {
     const db = await getDb()
     const body = request.body as {[key: string]: any}
-    console.log(body)
 
     // Sanitize user input
     if (body.name == "") return errorResponse

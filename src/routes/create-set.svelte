@@ -43,7 +43,6 @@
                 "Content-Type": "application/json"
             }
         })
-        console.log(name, words)
     }
 </script>
 
