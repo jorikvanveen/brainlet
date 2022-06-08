@@ -1,6 +1,5 @@
 <script lang="ts">
-import Navbar from "@components/navbar.svelte";
-
+    import Navbar from "@components/navbar.svelte";
 </script>
 <Navbar />
 <div class="nav-spacing"></div>

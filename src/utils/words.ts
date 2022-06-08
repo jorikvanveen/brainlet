@@ -147,7 +147,9 @@ class WordCollection {
     }
 
     public getPercentage(): number {
-        return this.getLearned().length / this.words.length * 100
+        const fully_learned = this.getLearned().length / this.words.length * 100;
+        const mpc_done = this.words.filter(word => word.has_done_mpc).length / this.words.length * 100;
+        return (fully_learned + mpc_done) / 2
     }
 }
 
