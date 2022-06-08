@@ -26,11 +26,12 @@ class Word {
     }
 
     public correct_spell(): void {
-        this.score += 1.1
+        this.score = 1.1
     }
 
     public correct_mpc(): void {
         this.score += 0.5
+        this.has_done_mpc = true
     }
 
     public incorrect(): void {
@@ -112,6 +113,37 @@ class WordCollection {
         for (let i = 0; i < num_of_words_to_add; i++) {
             this.words_learning.push(unlearnedWords[i])
         }
+    }
+
+    public getMpcWords(correct_word: Word): Word[] {
+        // Return 4 random words that haven't been learned
+        let wordpool = [...this.getUnlearned()];
+
+        if (wordpool.length < 4) {
+            wordpool = [...this.words];
+        }
+
+        // Remove correct word from the pool
+        let correct_word_idx = wordpool.findIndex(word => word == correct_word)
+        if (correct_word_idx != -1) {
+            wordpool.splice(correct_word_idx, 1)
+        }
+
+        let options: Word[] = []
+        let option_count = wordpool.length < 4 ? wordpool.length : 4
+        for (let i = 0; i < (option_count-1); i++) {
+            // Choose random word and remove it from the pool
+            let random_idx = Math.floor(Math.random() * (option_count-i));
+            let chosen_word = wordpool[random_idx]
+            wordpool.splice(random_idx, 1);
+            options.push(chosen_word)
+        }
+
+        options.push(correct_word)
+        // Shuffle the options
+        options.sort(() => Math.random()-0.5)
+
+        return options
     }
 
     public getPercentage(): number {

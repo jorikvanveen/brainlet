@@ -1,6 +1,9 @@
 <script lang="ts">
     import Input from "@components/input.svelte"
     import Button from "@components/button.svelte"
+    import throwError from "@utils/throwError"
+    import { goto } from "$app/navigation"
+
     let name = ""
 
     interface Word {
@@ -33,7 +36,7 @@
     }
 
     const submit = () => {
-        fetch("/api/submit", {
+        fetch("/api/create_set", {
             method: "POST",
             body: JSON.stringify({
                 name,
@@ -43,10 +46,25 @@
                 "Content-Type": "application/json"
             }
         })
+        .then(response => response.json())
+        .then(response => {
+            if (response.writeId && typeof response.writeId == "string") {
+                goto("/study/" + response.writeId)
+            } else {
+                throw new Error("Failed to upload set")
+            }
+        })
+        .catch(err => {
+            console.error(err)
+            throwError(err.toString())            
+        })
+
+
     }
 </script>
-
 <div class="main-form">
+    <h1>Create Set</h1>
+    <br />
     <Input type="text" bind:value={name} label="Set name" />
     <br/>
     <div class="words-container">
@@ -57,11 +75,12 @@
                     label="Term"
                     bind:value={word.term}
                 />
+                <div class="space-between-inputs"></div>
                 <Input 
                     type="text"
                     label="Definition"
                     bind:value={word.definition}
-                    on:tabout={handleBlur.bind(this, i)}
+                    on:tabforward={handleBlur.bind(this, i)}
                 />
             </div>
             <br/>
@@ -74,6 +93,9 @@
 </div>
 
 <style>
+    .space-between-inputs {
+        width: 10rem;
+    }
     .main-form {
         display: flex;
         flex-direction: column;    
@@ -91,5 +113,11 @@
         display: flex;
         flex-direction: row;
         width: 100%;
+    }
+
+    @media only screen and (max-width: 1150px) {
+        .main-form {
+            width: 90vw;
+        }
     }
 </style>

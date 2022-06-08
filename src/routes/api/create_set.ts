@@ -1,4 +1,4 @@
-import type { ServerRequest } from "@sveltejs/kit/types/hooks"
+import type { RequestEvent } from "@sveltejs/kit"
 import getDb from "@utils/db"
 
 const errorResponse = {
@@ -8,9 +8,9 @@ const errorResponse = {
     }
 }
 
-export async function post(request: ServerRequest): Promise<Record<string, unknown>> {
+export async function post(event: RequestEvent): Promise<Record<string, unknown>> {
     const db = await getDb()
-    const body = request.body as {[key: string]: any}
+    const body = await event.request.json() as {[key: string]: any}
 
     // Sanitize user input
     if (body.name == "") return errorResponse
@@ -29,12 +29,12 @@ export async function post(request: ServerRequest): Promise<Record<string, unkno
         })
     }
 
-    await db.collection("sets").insertOne(newDocument)
+    const writeResult = await db.collection("sets").insertOne(newDocument)
 
     return {
         body: {
-            success: true
-    
+            success: true,
+            writeId: writeResult.insertedId
         }
     }
 }

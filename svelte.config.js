@@ -13,12 +13,11 @@ const config = {
 		adapter: adapter({
 			out: "build",
 			precompress: false,
-			env: {
+			envPrefix: {
 				host: "host",
 				port: "port"
 			}
 		}),
-		target: '#svelte',
 		vite: {
 			build: {
 				minify: true
@@ -28,7 +27,7 @@ const config = {
 					"@components": path.resolve("./src/components"),
 					"@utils": path.resolve("./src/utils")
 				}
-			}
+			},
 		}
 	}
 };

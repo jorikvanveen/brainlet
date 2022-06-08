@@ -1,7 +1,7 @@
 import { MongoClient, Db } from "mongodb"
-import { MONGO_CONNECT_STRING } from "./env"
+import "dotenv/config"
 
-const client = new MongoClient(MONGO_CONNECT_STRING)
+const client = new MongoClient(process.env.MONGO_CONNECT_STRING)
 
 export default async function getDb(): Promise<Db> {
     await client.connect()

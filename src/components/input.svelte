@@ -1,21 +1,23 @@
 <script lang="ts">
     import { createEventDispatcher } from "svelte"
 
-    export let type: "text" | "number" | "password";
+    export let type: "text" | "number" | "password" | "textarea";
     export let label = "";
     export let value: string | number;
-    export let element: HTMLInputElement | null = null;
+    export let element: HTMLInputElement | HTMLTextAreaElement | null = null;
+    export let placeholder: string | null = null;
 
     const randomId = Math.floor(Math.random() * 1000000000).toString()
     const dispatch = createEventDispatcher()
 
-    const handleInput = (e: Event & { currentTarget: EventTarget & HTMLInputElement; }) => {
+    // Sorry for this type signature....
+    const handleInput = (e: Event & { currentTarget: EventTarget & (HTMLInputElement | HTMLTextAreaElement); }) => {
         value = e.currentTarget.value
     }
 
     const handleKeyDown = (e: KeyboardEvent) => {
-        if (e.key == "Tab" && !e.getModifierState("Shift")) {
-            dispatch("tabout")
+        if (e.key == "Tab") {
+            dispatch(e.getModifierState("shift") ? "tabback" : "tabforward")
         }
 
         if (e.key == "Enter") {
@@ -26,7 +28,11 @@
 
 <div class="standard-input">
     <label for={randomId}>{label}</label>
-    <input id={randomId} {type} {value} on:input={handleInput} on:keydown={handleKeyDown} bind:this={element}>
+    {#if (type !== "textarea")}
+        <input class="input" id={randomId} {type} {value} {placeholder} on:input={handleInput} on:keydown={handleKeyDown} bind:this={element}>
+    {:else}
+        <textarea class="input" id={randomId} {value} bind:this={element} on:input={handleInput} on:keydown={handleKeyDown}></textarea>
+    {/if}
 </div>
 
 <style>
@@ -36,7 +42,22 @@
         width: 100%;
     }
 
-    input {
+    .input {
         padding: 5px;
+        outline: none;
+        background-color: var(--bg-alt);
+        border: solid 2px var(--bg-alt);
+        border-radius: 3px;
+        font-size: large;
+        color: var(--text);
+    }
+
+    textarea {
+        height: 6rem;
+    }
+
+    label {
+        color: var(--text-alt);
+        font-size: 1rem;
     }
 </style>
