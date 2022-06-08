@@ -26,10 +26,15 @@ export async function handle({event, resolve}: {event: RequestEvent, resolve: (e
         let default_lang = "EN"
 
         // Determine default language
-        const ip = event.clientAddress;
-        const location = geoip.lookup(ip)
-        if (location?.country === "NL") {
-            default_lang = "NL"
+        try {
+            const ip = event.clientAddress;
+            const location = geoip.lookup(ip)
+            if (location?.country === "NL") {
+                default_lang = "NL"
+            }
+        } catch (e) {
+            console.warn("Failed to determine geolocation (ignore this warning during prerendering)")
+            console.warn(e)
         }
 
         // Add cookie to DB
