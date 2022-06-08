@@ -43,8 +43,8 @@ import { goto } from "$app/navigation";
 
 <br/>
 <div class="main">
-    <h1>Import set from quizlet</h1>
-    <p>Go to the set you want to import from quizlet, press the export button and then paste the output here.</p>
+    <h1>Import a set from Quizlet.</h1>
+    <p>Go to the set you want to import from quizlet, press the export button and then paste the output here. <a href="/help/quizlet-import/" target="_blank">Learn more</a></p>
     <br/>
     <Input type="text" placeholder="My awesome set" bind:value={set_name_input} label="Name" />
     <br/>
