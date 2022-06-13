@@ -2,9 +2,12 @@
 
 declare namespace App {
     interface Locals {
-        session_cookie: string | null
+        session_token: string
+        session_data: App.Session
     }
     interface Platform {}
-    interface Session {}
+    interface Session {
+        lang: string
+    }
     interface Stuff {}
 }

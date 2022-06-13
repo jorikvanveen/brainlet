@@ -36,7 +36,6 @@
     "cookie": "^0.5.0",
     "crypto-js": "^4.1.1",
     "dotenv": "^16.0.1",
-    "geoip-lite": "^1.4.5",
     "mongodb": "^4.7.0",
     "nanoid": "^3.1.28"
   }
