@@ -18,12 +18,13 @@
     import { tick } from "svelte";
     import { browser } from "$app/env";
     import MpcWidget from "@components/mpc.svelte";
+    import translate from "@utils/translate"
 
     export let set: Set;
 
     const performanceNow = (): number => {
         if (browser) return performance.now()
-        // We don't need any time tracking on the server side
+        // We don't need any time tracking on the server side (in this component, that is)
         return 0
     }
 
@@ -35,8 +36,8 @@
     let learnedPercent = 0;
     $: learnedPercentRounded = Math.round(learnedPercent)
     let userInput = ""
-    let intermediateScreen = false
-    let intermediateSince = performanceNow() || 0
+    let feedbackScreen = false
+    let feedbackSince = performanceNow() || 0
     let isCorrect = false
     let mpcOptions: Word[] | null = words.getMpcWords(currentWord);
 
@@ -48,12 +49,12 @@
     }
 
     const showFeedback = () => {
-        intermediateScreen = true
-        intermediateSince = performanceNow()
+        feedbackScreen = true
+        feedbackSince = performanceNow()
     }
 
     const next = () => {
-        intermediateScreen = false
+        feedbackScreen = false
         if (isCorrect) {
             if (!currentWord.has_done_mpc) {
                 currentWord.correct_mpc()
@@ -79,7 +80,7 @@
 
 
         if (learnedPercent === 100) {
-            alert("Everything learned!")
+            alert(translate("Everything learned!"))
         }
 
         // Wait for defInput to be defined and then focus it
@@ -113,19 +114,19 @@
 
     const handleWindowKeydown = (e: KeyboardEvent) => {
         // If press space, continue with next word
-        const timeIntermediate = performanceNow() - intermediateSince
-        if ((e.key === " " || e.key === "Enter") && intermediateScreen && timeIntermediate > 10) next()
+        const timeIntermediate = performanceNow() - feedbackSince
+        if ((e.key === " " || e.key === "Enter") && feedbackScreen && timeIntermediate > 10) next()
     }
 </script>
 
 <svelte:window on:keydown={handleWindowKeydown} />
 
-<h1>Study</h1>
-<p>Your progress: {learnedPercentRounded}%</p>
+<h1>{translate("Study")}</h1>
+<p>{translate("Your progress:")} {learnedPercentRounded}%</p>
 <h2>{currentTerm}</h2>
-{#if !intermediateScreen}
+{#if !feedbackScreen}
     {#if currentWord.has_done_mpc}
-        <Input on:submit={onSubmit} type="text" label="Definition" bind:value={userInput} bind:element={defInput} />
+        <Input on:submit={onSubmit} type="text" label={translate("Definition")} bind:value={userInput} bind:element={defInput} />
     {:else}
         <MpcWidget options={mpcOptions.map(word => word.definition)} on:option_select={optionSelected} />
     {/if}
@@ -134,16 +135,16 @@
         {userInput}
     </p>
     {#if isCorrect}
-        <p class="correct">Correct</p> 
+        <p class="correct">{translate("Correct")}</p> 
     {:else}
-        <p class="wrong">Wrong</p>
-        The correct definition was: <span class="correction">{currentDef}</span>
+        <p class="wrong">{translate("Wrong")}</p>
+        {translate("The correct definition was")}: <span class="correction">{currentDef}</span>
         <br/>
-        <Button label="Override: I was correct" on:click={override}/>
+        <Button label={translate("Override: I was correct")} on:click={override}/>
     {/if}
     <br/>
     <br/>
-    <p class="press-space-tip">Press space to continue</p>
+    <p class="press-space-tip">{translate("Press space to continue")}</p>
 {/if}
 
 <style>

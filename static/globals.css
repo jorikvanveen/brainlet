@@ -2,14 +2,14 @@
     /* https://coolors.co/336699-668eb3-2f4858-1b2b34-effff0 */
     --bg: #1B2B34;
     --bg-alt: #2F4858;
-    --fg: #336699;
-    --fg-alt: #668EB3;
+    --fg-alt: #00BBF9;
+    --fg: #0084FF;
     --text: #EFFFFF;
     --text-alt: #c1cfcf;
 }
 
 body {
-    font-family: sans-serif;
+    font-family: "SF Pro Text", "Roboto", sans-serif;
     color: var(--text);
     background-color: var(--bg);
 }

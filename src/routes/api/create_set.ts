@@ -1,5 +1,6 @@
 import type { RequestEvent } from "@sveltejs/kit"
 import getDb from "@utils/db"
+import cookie from "cookie"
 
 const errorResponse = {
     status: 400,
@@ -8,9 +9,24 @@ const errorResponse = {
     }
 }
 
+const invalidSessionResponse = {
+    body: {
+        success: false,
+        message: "Invalid session"
+    },
+    status: 400 
+}
+
 export async function post(event: RequestEvent): Promise<Record<string, unknown>> {
     const db = await getDb()
     const body = await event.request.json() as {[key: string]: any}
+    const session_token = cookie.parse(event.request.headers.get("cookie")).session
+
+    if (!session_token) return invalidSessionResponse
+    // Check if session exists
+    const session_data = await db.collection("sessions").findOne({token: session_token})
+
+    if (!session_data) return invalidSessionResponse 
 
     // Sanitize user input
     if (body.name == "") return errorResponse
@@ -18,7 +34,8 @@ export async function post(event: RequestEvent): Promise<Record<string, unknown>
     const newDocument = {
         name: body.name,
         words: [],
-        timestamp: new Date()
+        timestamp: new Date(),
+        owner: session_data._id.toString()
     }
 
     for (const word of body.words) {

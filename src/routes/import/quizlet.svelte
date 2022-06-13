@@ -1,9 +1,11 @@
 <script lang="ts">
-import { goto } from "$app/navigation";
+    import { goto } from "$app/navigation";
+    import translate from "@utils/translate"
 
     import Button from "@components/button.svelte";
     import Input from "@components/input.svelte";
     import throwError from "@utils/throwError";
+
     let set_data_input = "";
     let set_name_input = "";
 
@@ -41,28 +43,11 @@ import { goto } from "$app/navigation";
     }
 </script>
 
+<h1>{translate("Import a set from Quizlet")}</h1>
+<p>{translate("Go to the set you want to import from quizlet, press the export button and then paste the output here.")} <a href="/help/quizlet-import/" target="_blank">{translate("Learn more")}</a></p>
 <br/>
-<div class="main">
-    <h1>Import a set from Quizlet.</h1>
-    <p>Go to the set you want to import from quizlet, press the export button and then paste the output here. <a href="/help/quizlet-import/" target="_blank">Learn more</a></p>
-    <br/>
-    <Input type="text" placeholder="My awesome set" bind:value={set_name_input} label="Name" />
-    <br/>
-    <Input type="textarea" placeholder="https://quizlet.com/nl/633297749/worthilfe-blz-64-flash-cards/" bind:value={set_data_input} label="Import Data" />
-    <br/>
-    <Button on:click={submit} label="Import" />
-</div>
-
-<style>
-    .main {
-        max-width: 50vw;
-        margin: 0 auto;
-    }
-
-    @media only screen and (max-width: 1150px) {
-        .main {
-            max-width: 90vw;
-        }
-    }
-</style>
-
+<Input type="text" placeholder={translate("My awesome set")} bind:value={set_name_input} label={translate("Title")} />
+<br/>
+<Input type="textarea" placeholder="https://quizlet.com/nl/633297749/worthilfe-blz-64-flash-cards/" bind:value={set_data_input} label={translate("Import Data")} />
+<br/>
+<Button on:click={submit} label={translate("Import")} />

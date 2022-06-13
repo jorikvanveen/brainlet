@@ -1,14 +1,16 @@
 <script lang="ts">
     import { goto } from "$app/navigation";
+    import translate from "@utils/translate"
 </script>
+
 <div class="nav-container">
     <div class="subsection">
         <h2 on:click={goto.bind(this, "/")}>Brainlet</h2>
     </div>
     <div class="subsection links">
-        <a href="/">Home</a>
-        <a href="/create-set">Create Set</a>
-        <a href="/import/quizlet">Import Set</a>
+        <a href="/">{translate("Home")}</a>
+        <a href="/create-set">{translate("Create Set")}</a>
+        <a href="/import/quizlet">{translate("Import Set")}</a>
     </div>
     <div class="subsection"></div>
 </div>

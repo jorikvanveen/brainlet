@@ -89,14 +89,10 @@ class WordCollection {
         const filtered_words = words_learning.filter(word => {
             return this.spaceToWord(word) >= min_space_between_words
         })
+
         const random_idx = Math.floor(Math.random() * filtered_words.length)
-
         const selected_word = filtered_words[random_idx]
-
         this.words_history.push(selected_word)
-
-        console.log("Selected word",filtered_words)
-
         return selected_word
 
     }
@@ -115,6 +111,7 @@ class WordCollection {
         }
     }
 
+    // mpc stands for multiple choice
     public getMpcWords(correct_word: Word): Word[] {
         // Return 4 random words that haven't been learned
         let wordpool = [...this.getUnlearned()];

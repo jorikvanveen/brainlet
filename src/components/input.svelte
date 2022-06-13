@@ -42,6 +42,9 @@
         width: 100%;
     }
 
+    .standard-input {
+        width: 100%;
+    }
     .input {
         padding: 5px;
         outline: none;
@@ -50,10 +53,19 @@
         border-radius: 3px;
         font-size: large;
         color: var(--text);
+        max-width: 100%;
     }
 
     textarea {
         height: 6rem;
+    }
+
+    textarea:focus {
+        border: solid 2px var(--fg);
+    }
+
+    .input:focus {
+        border: solid 2px var(--fg);
     }
 
     label {

@@ -62,20 +62,23 @@
 
     }
 </script>
-<div class="main-form">
-    <h1>Create Set</h1>
-    <br />
-    <Input type="text" bind:value={name} label="Set name" />
-    <br/>
-    <div class="words-container">
-        {#each words as word, i}
-            <div class="word-container">
+
+<h1>Create Set</h1>
+<br />
+<Input type="text" bind:value={name} label="Set name" />
+<br/>
+<div class="words-container">
+    {#each words as word, i}
+        <div class="word-container">
+            <div class="input-container">
                 <Input 
                     type="text"
                     label="Term"
                     bind:value={word.term}
                 />
-                <div class="space-between-inputs"></div>
+            </div>
+            <div class="space-between-inputs"></div>
+            <div class="input-container">
                 <Input 
                     type="text"
                     label="Definition"
@@ -83,24 +86,19 @@
                     on:tabforward={handleBlur.bind(this, i)}
                 />
             </div>
-            <br/>
-        {/each}
+        </div>
         <br/>
-        <Button label="Add Word" on:click={addWord} />
-    </div>
-    <br/><br/>
+    {/each}
+    <br/>
+    <Button label="Add Word" on:click={addWord} />
+    <br/><br/><br/>
     <Button label="Upload Set" on:click={submit} />
 </div>
+<br/><br/>
 
-<style>
+<style lang="scss">
     .space-between-inputs {
-        width: 10rem;
-    }
-    .main-form {
-        display: flex;
-        flex-direction: column;    
-        width: 50vw;
-        margin: 0 auto;
+        width: 5%;
     }
 
     .words-container {
@@ -113,11 +111,9 @@
         display: flex;
         flex-direction: row;
         width: 100%;
-    }
 
-    @media only screen and (max-width: 1150px) {
-        .main-form {
-            width: 90vw;
+        .input-container {
+            width: 47.5%;
         }
     }
 </style>

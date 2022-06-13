@@ -50,14 +50,14 @@ export async function handle({event, resolve}: {event: RequestEvent, resolve: (e
     const requested_session_token = cookies.session;
 
     let session_token: string
-    let is_new_user = false
+    let should_send_cookie = false
 
     if (requested_session_token) {
         session_token = requested_session_token
     } else {
         // This is a new user, create a cookie and send it to the user
         session_token = await createSessionCookie(db, event);
-        is_new_user = true
+        should_send_cookie = true
     }
 
     // Get session data
@@ -69,7 +69,7 @@ export async function handle({event, resolve}: {event: RequestEvent, resolve: (e
         // Treat this user as a new user
         session_token = await createSessionCookie(db, event);
         session_data = await db.collection("sessions").findOne({token: session_token});
-        is_new_user = true
+        should_send_cookie = true
     }
 
     event.locals.session_data = session_data as unknown as App.Session
@@ -77,7 +77,7 @@ export async function handle({event, resolve}: {event: RequestEvent, resolve: (e
 
     const response = await resolve(event)
 
-    if (is_new_user) {
+    if (should_send_cookie) {
         // Send the created cookie to user
         response.headers.set("set-cookie", cookie.serialize("session", session_token, session_cookie_options))
     }
