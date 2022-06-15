@@ -28,7 +28,7 @@
         return 0
     }
 
-    let words: WordCollection = new WordCollection(set);
+    let words: WordCollection = new WordCollection(set.words.map(w => new Word(w.term, w.definition)), false);
     let currentWord: Word = words.selectWord();
     $: currentTerm = currentWord.term
     $: currentDef = currentWord.definition
@@ -65,7 +65,15 @@
             currentWord.incorrect()
         }
 
+
+
         words.update()
+        learnedPercent = words.getPercentage()
+        if (learnedPercent === 100) {
+            alert("Everything learned!")
+            return
+        }
+
         currentWord = words.selectWord()
 
         if (!currentWord) return
@@ -76,12 +84,6 @@
         }
 
         userInput = ""
-        learnedPercent = words.getPercentage()
-
-
-        if (learnedPercent === 100) {
-            alert(translate("Everything learned!"))
-        }
 
         // Wait for defInput to be defined and then focus it
         if (mpcOptions === null) {

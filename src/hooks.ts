@@ -3,6 +3,7 @@ import cookie from "cookie"
 import { nanoid } from "nanoid"
 import getDb from "@utils/db";
 import type { Db } from "mongodb";
+import { getSessionFromToken } from "@utils/sessionCache";
 
 function parseCookie(cookie_str: string | null) {
     if (!cookie_str) return {}
@@ -61,14 +62,14 @@ export async function handle({event, resolve}: {event: RequestEvent, resolve: (e
     }
 
     // Get session data
-    let session_data = await db.collection("sessions").findOne({token: session_token});
+    let session_data = await getSessionFromToken(session_token);
 
     if (!session_data) {
         // This only happens when the user has a cookie, but it can't be found in the database
         
         // Treat this user as a new user
         session_token = await createSessionCookie(db, event);
-        session_data = await db.collection("sessions").findOne({token: session_token});
+        session_data = await getSessionFromToken(session_token);
         should_send_cookie = true
     }
 

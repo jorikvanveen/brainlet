@@ -1,4 +1,12 @@
 npm run build &&
+
+# Add telemetry
+cp tracing.js build/tracing.js
+echo "import 'dotenv'" > build/index_.js
+echo "import './tracing.js'" >> build/index_.js
+cat build/index.js >> build/index_.js
+mv build/index_.js build/index.js
+
 zip -r build build &&
 scp package.json jorik-vv:~/services/brainlet &&
 scp build.zip jorik-vv:~/services/brainlet &&

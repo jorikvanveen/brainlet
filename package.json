@@ -35,6 +35,10 @@
   },
   "type": "module",
   "dependencies": {
+    "@opentelemetry/api": "^1.1.0",
+    "@opentelemetry/auto-instrumentations-node": "^0.30.0",
+    "@opentelemetry/exporter-otlp-grpc": "^0.26.0",
+    "@opentelemetry/sdk-node": "^0.29.2",
     "cookie": "^0.5.0",
     "crypto-js": "^4.1.1",
     "dotenv": "^16.0.1",

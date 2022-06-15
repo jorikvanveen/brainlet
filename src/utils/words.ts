@@ -4,12 +4,14 @@ class Word {
     term: string
     definition: string
     has_done_mpc: boolean
+    is_queued: boolean
     private _score: number
 
     constructor(term: string, definition: string) {
         this.term = term
         this.definition = definition
         this.has_done_mpc = false
+        this.is_queued = false
         this._score = 0
     }
 
@@ -44,27 +46,32 @@ class WordCollection {
     words_learning: Word[]
     words_history: Word[]
 
-    constructor(set: Set) {
-        this.words = []
+    constructor(words: Word[], shuffle: boolean) {
+        this.words = words
         this.words_learning = []
         this.words_history = []
 
-        for (const wordData of set.words) {
-            this.words.push(new Word(wordData.term, wordData.definition))
-        }
-
         // Shuffle the array
-        this.words = this.words.sort(() => Math.random() - 0.5)
+        if (shuffle) {
+            this.words = this.words.sort(() => Math.random() - 0.5)
+        }
 
         // Pick 10 first words as words_learning
         for (let i = 0; i < 10; i++) {
             const selectedWord = this.words[i];
-            if (selectedWord) this.words_learning.push(this.words[i]);
+            if (selectedWord) {
+                selectedWord.is_queued = true
+                this.words_learning.push(selectedWord)
+            }
         }
     }
 
     private getUnlearned(): Word[] {
         return this.words.filter(word => !word.learned)
+    }
+
+    private getUnqueued(): Word[] {
+        return this.words.filter(word => !word.learned && !word.is_queued)
     }
 
     private getLearned(): Word[] {
@@ -92,7 +99,12 @@ class WordCollection {
 
         const random_idx = Math.floor(Math.random() * filtered_words.length)
         const selected_word = filtered_words[random_idx]
+
+        if (!selected_word) {
+            throw new Error("Selected word does not exist")
+        }
         this.words_history.push(selected_word)
+
         return selected_word
 
     }
@@ -102,12 +114,14 @@ class WordCollection {
         this.words_learning = this.words_learning.filter(word => !word.learned)
 
         // Add new words to learn
-        const unlearnedWords = this.getUnlearned()
-        const words_learning_target_length = Math.min(10, unlearnedWords.length)
+        const unqueuedWords = this.getUnqueued()
+        const words_learning_target_length = Math.min(10, unqueuedWords.length)
         const num_of_words_to_add = words_learning_target_length - this.words_learning.length
 
         for (let i = 0; i < num_of_words_to_add; i++) {
-            this.words_learning.push(unlearnedWords[i])
+            const word_to_add = unqueuedWords[i];
+            word_to_add.is_queued = true
+            this.words_learning.push(word_to_add)
         }
     }
 
@@ -147,6 +161,11 @@ class WordCollection {
         const fully_learned = this.getLearned().length / this.words.length * 100;
         const mpc_done = this.words.filter(word => word.has_done_mpc).length / this.words.length * 100;
         return (fully_learned + mpc_done) / 2
+    }
+
+    public findDuplicateTerms() {
+        const terms = this.words.map(word => word.term)
+        return terms.filter((term, i) => terms.indexOf(term) != i)
     }
 }
 

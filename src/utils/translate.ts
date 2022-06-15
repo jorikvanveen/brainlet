@@ -45,7 +45,8 @@ const translations = {
         "Set title": "Set titel",
         "Term": "Term",
         "Add word": "Woord toevoegen",
-        "Upload set": "Set uploaden"
+        "Upload set": "Set uploaden",
+        "Please remove the duplicates (marked in yellow)": "Deze zet heeft dubbele termen, haal ze weg voor dat je de set opslaat. Ze staan in het geel gemarkeerd."
 
     }
 }
