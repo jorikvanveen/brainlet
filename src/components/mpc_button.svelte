@@ -14,7 +14,7 @@
     </div>
 </button>
 
-<style>
+<style lang="scss">
     button {
         display: flex;
         flex-direction: column;
@@ -34,6 +34,10 @@
         width: 100%;
         text-align: center;
         cursor: pointer;
+
+        div {
+            width: 90%;
+        }
     }
 
     .option-number {

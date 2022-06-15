@@ -121,9 +121,8 @@
 
 <svelte:window on:keydown={handleWindowKeydown} />
 
-<h1>{translate("Study")}</h1>
-<p>{translate("Your progress:")} {learnedPercentRounded}%</p>
-<h2>{currentTerm}</h2>
+<p>{translate("Your progress")}: <b>{learnedPercentRounded}</b>%</p>
+<h1>{currentTerm}</h1>
 {#if !feedbackScreen}
     {#if currentWord.has_done_mpc}
         <Input on:submit={onSubmit} type="text" label={translate("Definition")} bind:value={userInput} bind:element={defInput} />

@@ -29,7 +29,7 @@
 
 <style>
     .mpc-container {
-        width: 70vw;
+        /* width: 70vw; */
         display: flex;
         flex-direction: row;
         gap: 1rem;
@@ -37,5 +37,6 @@
 
     .option {
         flex-grow: 1;
+        flex-wrap: wrap;
     }
 </style>

@@ -32,13 +32,21 @@ const translations = {
         // /study
         "Everything learned!": "Alles geleerd!",
         "Study": "Leren",
-        "Your progress:": "Voortgang",
+        "Your progress": "Voortgang",
         "Correct": "Juist",
         "The correct definition was": "De juiste definitie was:",
         "Override: I was correct": "Goed rekenen: ik heb hem wel goed",
         "Press space to continue": "Druk op spatie om door te gaan",
         "Definition": "Definitie",
-        "Wrong": "Onjuist"
+        "Wrong": "Onjuist",
+
+        // /create-set
+        "Failed to upload set": "Kon de set niet uploaden",
+        "Set title": "Set titel",
+        "Term": "Term",
+        "Add word": "Woord toevoegen",
+        "Upload set": "Set uploaden"
+
     }
 }
 
@@ -50,7 +58,10 @@ export default function translate( eng_string: string): string {
     }
 
     // Get translation from english to target language
-    const translated = translations[target_lang][eng_string]
+    const dictionary = translations[target_lang];
+    if (!dictionary) return eng_string;
+
+    const translated = dictionary[eng_string];
 
     // Fall back to english if translation doesn't exist
     if (!translated) {

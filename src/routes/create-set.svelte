@@ -3,6 +3,7 @@
     import Button from "@components/button.svelte"
     import throwError from "@utils/throwError"
     import { goto } from "$app/navigation"
+    import translate from "@utils/translate"
 
     let name = ""
 
@@ -51,7 +52,7 @@
             if (response.writeId && typeof response.writeId == "string") {
                 goto("/study/" + response.writeId)
             } else {
-                throw new Error("Failed to upload set")
+                throw new Error(translate("Failed to upload set"))
             }
         })
         .catch(err => {
@@ -63,9 +64,9 @@
     }
 </script>
 
-<h1>Create Set</h1>
+<h1>{translate("Create Set")}</h1>
 <br />
-<Input type="text" bind:value={name} label="Set name" />
+<Input type="text" bind:value={name} label={translate("Set title")} />
 <br/>
 <div class="words-container">
     {#each words as word, i}
@@ -73,7 +74,7 @@
             <div class="input-container">
                 <Input 
                     type="text"
-                    label="Term"
+                    label={translate("Term")}
                     bind:value={word.term}
                 />
             </div>
@@ -81,7 +82,7 @@
             <div class="input-container">
                 <Input 
                     type="text"
-                    label="Definition"
+                    label={translate("Definition")}
                     bind:value={word.definition}
                     on:tabforward={handleBlur.bind(this, i)}
                 />
@@ -90,9 +91,9 @@
         <br/>
     {/each}
     <br/>
-    <Button label="Add Word" on:click={addWord} />
+    <Button label={translate("Add word")} on:click={addWord} />
     <br/><br/><br/>
-    <Button label="Upload Set" on:click={submit} />
+    <Button label={translate("Upload set")} on:click={submit} />
 </div>
 <br/><br/>
 
