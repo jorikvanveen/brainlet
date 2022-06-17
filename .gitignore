@@ -5,3 +5,6 @@ node_modules
 /package
 .env
 .deploy.sh
+/test-results/
+/playwright-report/
+/playwright/.cache/

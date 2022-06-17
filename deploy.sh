@@ -13,5 +13,5 @@ scp build.zip jorik-vv:~/services/brainlet &&
 scp .env jorik-vv:~/services/brainlet/build &&
 ssh jorik-vv "cd ~/services/brainlet && bash extract.sh" &&
 ssh jorik-vv "cd ~/services/brainlet && npm i" &&
-#ssh jorik-vv "cd ~/services/brainlet && pm2 restart index.js"
+ssh jorik-vv "pm2 restart index --update-env" &&
 rm build.zip

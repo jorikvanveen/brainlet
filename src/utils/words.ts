@@ -1,5 +1,3 @@
-import type { Set } from "@utils/dbReturnTypes"
-
 class Word {
     term: string
     definition: string
@@ -169,4 +167,34 @@ class WordCollection {
     }
 }
 
-export { WordCollection, Word }
+const bracesRegex = /\(.*?\)/gm;
+const removeAnythingInBraces = (str: string): string => {
+    return str.replaceAll(bracesRegex, "")
+}
+
+const wordMatchFunction = (word: Word, userInput: string) => {
+    let definition = word.definition;
+    // Remove anything that is in ()
+
+    definition = removeAnythingInBraces(definition)
+    userInput = removeAnythingInBraces(userInput)
+    console.log(definition, userInput)
+
+    definition = definition.replaceAll(".", "").trim()
+    userInput = userInput.replaceAll(".", "").trim()
+    console.log(definition, userInput)
+
+    const definitions = definition.split(/,|\//gm).map(part => part.trim())
+    const userInputs = userInput.split(/,|\//gm).map(part => part.trim())
+    console.log(definitions, userInputs)
+
+    // See if every value in definition is in userinput and no extra values exist in userInputs
+    const userInputHasEveryDefinition = !definitions.find(definition => userInputs.indexOf(definition) === -1)
+    const lenghtsMatch = definitions.length === userInputs.length
+    console.log(userInputHasEveryDefinition, lenghtsMatch)
+
+    return userInputHasEveryDefinition && lenghtsMatch
+
+}
+
+export { WordCollection, Word, wordMatchFunction }

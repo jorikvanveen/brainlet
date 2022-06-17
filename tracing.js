@@ -4,8 +4,9 @@
 
 import process from "process"
 import opentelemetry from '@opentelemetry/sdk-node'
-import { getNodeAutoInstrumentations } from "@opentelemetry/auto-instrumentations-node";
 import { OTLPTraceExporter } from "@opentelemetry/exporter-otlp-grpc";
+import { HttpInstrumentation } from "@opentelemetry/instrumentation-http";
+import { MongoDBInstrumentation } from "@opentelemetry/instrumentation-mongodb";
 //const process = require('process');
 //const opentelemetry = require('@opentelemetry/sdk-node');
 //const { getNodeAutoInstrumentations } = require('@opentelemetry/auto-instrumentations-node');
@@ -15,7 +16,10 @@ import { OTLPTraceExporter } from "@opentelemetry/exporter-otlp-grpc";
 const traceExporter = new OTLPTraceExporter();
 const sdk = new opentelemetry.NodeSDK({
   traceExporter,
-  instrumentations: [getNodeAutoInstrumentations()]
+  instrumentations: [
+    new HttpInstrumentation(),
+    new MongoDBInstrumentation(),
+  ]
 });
 
 // initialize the SDK and register with the OpenTelemetry API

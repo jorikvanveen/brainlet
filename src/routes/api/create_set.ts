@@ -38,7 +38,7 @@ export async function post(event: RequestEvent): Promise<Record<string, unknown>
         owner: session_data._id.toString()
     }
 
-    for (const word of body.words) {
+    for (const word of body.words_array) {
         if (word.term == "" || word.definition == "") continue
         newDocument.words.push({
             term: word.term,

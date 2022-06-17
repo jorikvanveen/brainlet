@@ -21,6 +21,8 @@
         }
 
         if (e.key == "Enter") {
+            e.preventDefault()
+            e.stopPropagation()
             dispatch("submit")
         }
     }

@@ -63,8 +63,9 @@
 
     const submit = () => {
         // Validate
-        if (duplicates) {
-            alert(translate("Please remove the duplicates (marked in yellow)"))
+        if (duplicates.length > 0) {
+            const translated = translate("Please remove the duplicates (marked in yellow)")
+            alert(translated)
             return
         }
 

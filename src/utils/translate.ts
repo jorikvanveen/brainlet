@@ -1,3 +1,4 @@
+import { browser } from "$app/env"
 import { session } from "$app/stores"
 import { get } from "svelte/store"
 
@@ -53,7 +54,11 @@ const translations = {
 
 export default function translate( eng_string: string): string {
     // Get current language
-    let target_lang = get(session).lang
+    let target_lang: string
+
+    if (browser) {
+        target_lang = localStorage.getItem("lang")
+    }
     if (!target_lang) {
         target_lang = "EN"
     }

@@ -12,21 +12,16 @@
 </script>
 
 <script lang="ts">
-    import { WordCollection, Word } from "@utils/words";
+    import { WordCollection, Word, wordMatchFunction } from "@utils/words";
     import Input from "@components/input.svelte";
     import Button from "@components/button.svelte";
     import { tick } from "svelte";
-    import { browser } from "$app/env";
     import MpcWidget from "@components/mpc.svelte";
     import translate from "@utils/translate"
 
     export let set: Set;
 
-    const performanceNow = (): number => {
-        if (browser) return performance.now()
-        // We don't need any time tracking on the server side (in this component, that is)
-        return 0
-    }
+
 
     let words: WordCollection = new WordCollection(set.words.map(w => new Word(w.term, w.definition)), false);
     let currentWord: Word = words.selectWord();
@@ -37,20 +32,19 @@
     $: learnedPercentRounded = Math.round(learnedPercent)
     let userInput = ""
     let feedbackScreen = false
-    let feedbackSince = performanceNow() || 0
     let isCorrect = false
     let mpcOptions: Word[] | null = words.getMpcWords(currentWord);
 
     let defInput: HTMLInputElement | null = null
 
     const onSubmit = () => {
-        isCorrect = userInput.trim() === currentDef.trim()
+        isCorrect = wordMatchFunction(currentWord, userInput)
+        // isCorrect = userInput.trim() === currentDef.trim()
         showFeedback()
     }
 
     const showFeedback = () => {
         feedbackScreen = true
-        feedbackSince = performanceNow()
     }
 
     const next = () => {
@@ -64,8 +58,6 @@
         } else {
             currentWord.incorrect()
         }
-
-
 
         words.update()
         learnedPercent = words.getPercentage()
@@ -116,15 +108,15 @@
 
     const handleWindowKeydown = (e: KeyboardEvent) => {
         // If press space, continue with next word
-        const timeIntermediate = performanceNow() - feedbackSince
-        if ((e.key === " " || e.key === "Enter") && feedbackScreen && timeIntermediate > 10) next()
+        // if ((e.key === " " || e.key === "Enter") && feedbackScreen && timeIntermediate > 10) next()
+        if ((e.key === " " || e.key === "Enter") && feedbackScreen) next()
     }
 </script>
 
 <svelte:window on:keydown={handleWindowKeydown} />
 
-<p>{translate("Your progress")}: <b>{learnedPercentRounded}</b>%</p>
-<h1>{currentTerm}</h1>
+<p id="progress-indicator">{translate("Your progress")}: <b>{learnedPercentRounded}</b>%</p>
+<h1 id="prompt">{currentTerm}</h1>
 {#if !feedbackScreen}
     {#if currentWord.has_done_mpc}
         <Input on:submit={onSubmit} type="text" label={translate("Definition")} bind:value={userInput} bind:element={defInput} />
@@ -136,9 +128,9 @@
         {userInput}
     </p>
     {#if isCorrect}
-        <p class="correct">{translate("Correct")}</p> 
+        <p class="feedback-text correct">{translate("Correct")}</p> 
     {:else}
-        <p class="wrong">{translate("Wrong")}</p>
+        <p class="feedback-text wrong">{translate("Wrong")}</p>
         {translate("The correct definition was")}: <span class="correction">{currentDef}</span>
         <br/>
         <Button label={translate("Override: I was correct")} on:click={override}/>
